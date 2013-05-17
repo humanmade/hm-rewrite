@@ -95,6 +95,7 @@ class HM_Rewrite {
 				$status_header = 405;
 		}
 
+		header( 'Content-Type: application/json' );
 		status_header( (int)$status_header );
 		echo json_encode( array( 'status' => $status, 'message' => $message ) );
 		exit;
