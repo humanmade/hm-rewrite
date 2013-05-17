@@ -79,6 +79,27 @@ class HM_Rewrite {
 		} );
 	}
 
+	/**
+	 * Do a response to a request
+	 *
+	 * @param string  $status         'success', 'error', or a custom status
+	 * @param string  $message        Message to include with response (optional)
+	 * @param int     $status_header  HTTP status header (optional)
+	 */
+	public static function do_json_response( $status, $message = '', $status_header = false ) {
+
+		if ( ! $status_header ) {
+			if ( 'success' == $status )
+				$status_header = 200;
+			else
+				$status_header = 405;
+		}
+
+		status_header( (int)$status_header );
+		echo json_encode( array( 'status' => $status, 'message' => $message ) );
+		exit;
+	}
+
 }
 
 class HM_Rewrite_Rule {
@@ -146,8 +167,7 @@ class HM_Rewrite_Rule {
 
 		// check request methods match
 		if ( $this->request_methods && ! in_array( strtolower( $_SERVER['REQUEST_METHOD'] ), $this->request_methods ) ) {
-			header( 'HTTP/1.1 403 Forbidden' );
-			exit;
+			HM_Rewrite::do_json_response( 'error', 'Invalid request method', 403 );
 		}
 
 		do_action( 'hm_parse_request_' . $this->get_regex(), $wp );
