@@ -206,7 +206,7 @@ class HM_Rewrite_Rule {
 
 			if ( $t->template ) {
 
-				locate_template( $t -> template, true);
+				locate_template( $t->template, true);
 				exit;
 			}
 		});
