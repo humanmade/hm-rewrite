@@ -206,15 +206,7 @@ class HM_Rewrite_Rule {
 
 			if ( $t->template ) {
 
-				$template = $t->template;
-
-				if ( ! file_exists( $template ) )
-					$template = get_stylesheet_directory() . '/' . $t->template;
-
-				if ( ! file_exists( $template ) )
-					$template = get_template_directory() . '/' . $t->template;
-
-				include( $template );
+				locate_template( $t->template, true);
 				exit;
 			}
 		});
