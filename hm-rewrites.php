@@ -205,8 +205,11 @@ class HM_Rewrite_Rule {
 			
 
 			if ( $t->template ) {
-
-				locate_template( $t->template, true );
+				if( strpos( $t->template, '/' ) === false ){
+					locate_template( $t->template, true );
+				}else{
+					include( $t->template );
+				}
 				exit;
 			}
 		});
