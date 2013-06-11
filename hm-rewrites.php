@@ -202,11 +202,17 @@ class HM_Rewrite_Rule {
 			foreach ( $t->query_callbacks as $callback )
 				call_user_func_array( $callback, array( $wp_query ) );
 
-			
-
 			if ( $t->template ) {
 
-				locate_template( $t->template, true );
+				$template = $t->template;
+
+				if ( ! file_exists( $template ) )
+					$template = get_stylesheet_directory() . '/' . $t->template;
+
+				if ( ! file_exists( $template ) )
+					$template = get_template_directory() . '/' . $t->template;
+
+				include( $template );
 				exit;
 			}
 		});
