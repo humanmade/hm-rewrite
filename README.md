@@ -46,6 +46,7 @@ hm_rewrite_rule( array(
       }
     )
 );
+````
 
 ## Contribution guidelines ##
 
