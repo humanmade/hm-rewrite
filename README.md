@@ -46,3 +46,8 @@ hm_rewrite_rule( array(
       }
     )
 );
+
+## Contribution guidelines ##
+
+see https://github.com/humanmade/hm-rewrite/blob/master/CONTRIBUTING.md
+
