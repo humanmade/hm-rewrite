@@ -154,7 +154,7 @@ class HM_Rewrite_Rule {
 
 		$bail = false;
 		foreach ( $this->request_callbacks as $callback ) {
-			$return = call_user_func_array( $callback, array( $wp ) );
+			$return = call_user_func_array( $callback, array( $wp, $this ) );
 
 			// Avoid counting `null`/no return as an error
 			$bail |= ( $return === false );
@@ -209,7 +209,7 @@ class HM_Rewrite_Rule {
 			}
 
 			foreach ( $t->query_callbacks as $callback )
-				call_user_func_array( $callback, array( $wp_query ) );
+				call_user_func_array( $callback, array( $wp_query, $t ) );
 
 			if ( $t->template ) {
 
