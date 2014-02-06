@@ -152,8 +152,17 @@ class HM_Rewrite_Rule {
 
 		do_action( 'hm_parse_request_' . $this->get_regex(), $wp );
 
-		foreach ( $this->request_callbacks as $callback )
-			call_user_func_array( $callback, array( $wp ) );
+		$bail = false;
+		foreach ( $this->request_callbacks as $callback ) {
+			$return = call_user_func_array( $callback, array( $wp ) );
+
+			// Avoid counting `null`/no return as an error
+			$bail |= ( $return === false );
+		}
+
+		// If a callback returned false, bail from the request
+		if ( $bail )
+			return;
 
 		$t = $this;
 
