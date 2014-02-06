@@ -153,7 +153,7 @@ class HM_Rewrite_Rule {
 		do_action( 'hm_parse_request_' . $this->get_regex(), $wp );
 
 		foreach ( $this->request_callbacks as $callback )
-			call_user_func_array( $callback, array( $wp ) );
+			call_user_func_array( $callback, array( $wp, $this ) );
 
 		$t = $this;
 
@@ -200,7 +200,7 @@ class HM_Rewrite_Rule {
 			}
 
 			foreach ( $t->query_callbacks as $callback )
-				call_user_func_array( $callback, array( $wp_query ) );
+				call_user_func_array( $callback, array( $wp_query, $t ) );
 
 			if ( $t->template ) {
 
