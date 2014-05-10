@@ -212,16 +212,11 @@ class HM_Rewrite_Rule {
 				call_user_func_array( $callback, array( $wp_query, $t ) );
 
 			if ( $t->template ) {
-
-				$template = $t->template;
-
-				if ( ! file_exists( $template ) )
-					$template = get_stylesheet_directory() . '/' . $t->template;
-
-				if ( ! file_exists( $template ) )
-					$template = get_template_directory() . '/' . $t->template;
-
-				include( $template );
+				if( is_file( $template ) {
+					include( $t->template );
+				} else{
+					locate_template( $t->template, true );
+				}
 				exit;
 			}
 		});
