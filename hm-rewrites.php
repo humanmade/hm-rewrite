@@ -510,22 +510,30 @@ add_filter( 'query_vars', function( $query_vars ) {
 
 } );
 
+/**
+ * Flush rewrite rules, without deleting the option
+ *
+ * Uses `update_option` without first using `delete_option`, allowing it to run
+ * on every request.
+ */
+function hm_rewrite_flush() {
+	do_action( 'hm_rewrite_before_flush' );
+
+	global $wp_rewrite;
+	$wp_rewrite->matches = 'matches';
+	$rules = $wp_rewrite->rewrite_rules( true );
+
+	if ( update_option( 'rewrite_rules', $rules ) ) {
+		do_action( 'hm_rewrite_flushed', $rules );
+	}
+	else {
+		do_action( 'hm_rewrite_cached', $rules );
+	}
+}
+
 if ( HM_REWRITE_AUTOFLUSH ) {
 	/**
 	 * Automatically flush rewrite rules when they're changed
 	 */
-	add_action( 'wp_loaded', function() {
-		do_action( 'hm_rewrite_before_flush' );
-
-		global $wp_rewrite;
-		$wp_rewrite->matches = 'matches';
-		$rules = $wp_rewrite->rewrite_rules( true );
-
-		if ( update_option( 'rewrite_rules', $rules ) ) {
-			do_action( 'hm_rewrite_flushed', $rules );
-		}
-		else {
-			do_action( 'hm_rewrite_cached', $rules );
-		}
-	}, 9999 );
+	add_action( 'wp_loaded', 'hm_rewrite_flush', 9999 );
 }
