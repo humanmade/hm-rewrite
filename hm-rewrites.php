@@ -216,7 +216,9 @@ class HM_Rewrite_Rule {
 				call_user_func_array( $callback, array( $wp_query, $t ) );
 
 			if ( $t->template ) {
-				if( is_file( $template ) ){
+				if (  $wp_query->query && $wp_query->is_404 ) {
+					include( get_404_template() );
+				} else if ( is_file( $template ) ) {
 					include( $t->template );
 				} else{
 					locate_template( $t->template, true );
