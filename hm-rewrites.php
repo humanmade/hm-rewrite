@@ -173,6 +173,7 @@ class HM_Rewrite_Rule {
 		// set up the hooks for everything
 		add_action( 'template_redirect', function( $template ) use ( $t ) {
 
+			/* @var WP_Query $wp_query */
 			global $wp_query;
 
 			// check permissions
@@ -216,7 +217,9 @@ class HM_Rewrite_Rule {
 				call_user_func_array( $callback, array( $wp_query, $t ) );
 
 			if ( $t->template ) {
-				if( is_file( $template ) ){
+				if ( ! $this->get_wp_query_args() && $wp_query->is_404() ) {
+					include( get_404_template() );
+				} else if ( is_file( $template ) ) {
 					include( $t->template );
 				} else{
 					locate_template( $t->template, true );
