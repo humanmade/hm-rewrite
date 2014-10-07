@@ -171,7 +171,7 @@ class HM_Rewrite_Rule {
 		$t = $this;
 
 		// set up the hooks for everything
-		add_action( 'template_redirect', function( $template ) use ( $t ) {
+		add_action( 'template_redirect', function() use ( $t ) {
 
 			/* @var WP_Query $wp_query */
 			global $wp_query;
@@ -219,7 +219,7 @@ class HM_Rewrite_Rule {
 			if ( $t->template ) {
 				if ( ! $this->get_wp_query_args() && $wp_query->is_404() ) {
 					include( get_404_template() );
-				} else if ( is_file( $template ) ) {
+				} else if ( is_file( $t->template ) ) {
 					include( $t->template );
 				} else{
 					locate_template( $t->template, true );
