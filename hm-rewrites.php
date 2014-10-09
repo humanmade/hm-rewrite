@@ -170,6 +170,16 @@ class HM_Rewrite_Rule {
 
 		$t = $this;
 
+		add_action( 'template_redirect', function() use ( $t ) {
+			
+			/* @var WP_Query $wp_query */
+			global $wp_query;
+			
+			foreach ( $t->query_callbacks as $callback )
+				call_user_func_array( $callback, array( $wp_query, $t ) );
+
+		}, 1 );
+
 		// set up the hooks for everything
 		add_action( 'template_redirect', function() use ( $t ) {
 
@@ -212,9 +222,6 @@ class HM_Rewrite_Rule {
 
 				exit;
 			}
-
-			foreach ( $t->query_callbacks as $callback )
-				call_user_func_array( $callback, array( $wp_query, $t ) );
 
 			if ( $t->template ) {
 				if ( ! $this->get_wp_query_args() && $wp_query->is_404() ) {
