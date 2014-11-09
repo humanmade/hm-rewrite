@@ -397,8 +397,10 @@ function hm_add_rewrite_rule( $args = array() ) {
 
 	// backwards compat
 	if ( count( func_get_args() ) > 1 && is_string( $args ) ) {
+
+		$regex = $args;
 		$args = array();
-		$args['regex'] = func_get_arg( 0 );
+		$args['regex'] = $regex;
 		$args['query'] = func_get_arg( 1 );
 
 		if ( count( func_get_args() ) > 2 )
