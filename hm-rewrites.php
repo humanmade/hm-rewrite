@@ -40,13 +40,14 @@ class HM_Rewrite {
 	/**
 	 * Remove a rule
 	 *
-	 * @param  string $id the identifier for the rule (regex or id if specific in the rule)
+	 * @param  string $id|HM_Rewrite_Rule the identifier for the rule (regex or id if specific in the rule)
 	 */
-	public static function remove_rule( $id ) {
+	public static function remove_rule( $id_or_object ) {
 
 		$rules = &self::$rules;
-		array_walk( self::$rules, function( $rule, $key ) use ( $id, &$rules ) {
-			if ( $rule->id == $id )
+
+		array_walk( self::$rules, function( $rule, $key ) use ( $id_or_object, &$rules ) {
+			if ( ( is_a( $id_or_object, 'HM_Rewrite_Rule' ) && $id_or_object === $rule ) || $rule->id == $id_or_object )
 				unset( $rules[$key] );
 		} );
 
@@ -66,6 +67,15 @@ class HM_Rewrite {
 
 		return reset( $rule );
 
+	}
+
+	public static function get_rule_by_regex( $regex ) {
+
+		foreach ( self::$rules as $rule ) {
+			if ( $rule->regex === $regex ) {
+				return $rule;
+			}
+		}
 	}
 
 	/**
@@ -456,6 +466,7 @@ function hm_add_rewrite_rule( $args = array() ) {
 	if ( ! empty( $args['post_query_properties'] ) )
 		$rule->add_query_callback( function( WP_Query $query ) use ( $args ) {
 			$args['post_query_properties'] = wp_parse_args( $args['post_query_properties'] );
+
 			foreach ( $args['post_query_properties'] as $property => $value )
 				$query->$property = $value;
 
