@@ -8,7 +8,7 @@ The goal of HM_Rewrite and associated fuctions / classes is to make it very easy
 ````php
 hm_add_rewrite_rule( array( 
   'regex' 	  => '^users/([^/]+)/?',  
-  'query'	  	=> 'author_name=$matches[1]&amp;', 
+  'query'	  	=> 'author_name=$matches[1]', 
   'template'	=> 'user-archive.php',
   'body_class_callback' => function( $classes ) { 
     $classes[] = 'user-archive';
@@ -26,7 +26,7 @@ hm_add_rewrite_rule( array(
   ````php
   hm_add_rewrite_rule( array( 
     'regex' 	=> '^reviews/([^/]+)/?', // a review category page 
-    'query'		=> 'review_category=$matches[1]&amp;', 
+    'query'		=> 'review_category=$matches[1]', 
     'template'	=> 'review-category.php',
     'request_callback' => function( WP $wp ) {
       // if the review category is "laptops" then only show items in draft
