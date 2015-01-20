@@ -397,17 +397,17 @@ function hm_add_rewrite_rule( $args = array() ) {
 
 	// backwards compat
 	if ( count( func_get_args() ) > 1 && is_string( $args ) ) {
+		$provided = func_get_args();
 
-		$regex = $args;
 		$args = array();
-		$args['regex'] = $regex;
-		$args['query'] = func_get_arg( 1 );
+		$args['regex'] = $provided[0];
+		$args['query'] = $provided[1];
 
-		if ( count( func_get_args() ) > 2 )
-			$args['template'] = func_get_arg( 2 );
+		if ( count( $provided ) > 2 )
+			$args['template'] = $provided[2];
 
-		if ( count( func_get_args() ) > 3 )
-			$args = array_merge( $args, func_get_arg( 3 ) );
+		if ( count( $provided ) > 3 )
+			$args = array_merge( $args, $provided[3] );
 	}
 
 	if ( ! empty( $args['rewrite'] ) )
