@@ -234,7 +234,7 @@ class HM_Rewrite_Rule {
 			}
 
 			if ( $t->template ) {
-				if ( ! $this->get_wp_query_args() && $wp_query->is_404() ) {
+				if ( ! $t->get_wp_query_args() && $wp_query->is_404() ) {
 					include( get_404_template() );
 				} else if ( is_file( $t->template ) ) {
 					include( $t->template );
