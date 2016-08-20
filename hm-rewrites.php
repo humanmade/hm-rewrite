@@ -275,27 +275,29 @@ class HM_Rewrite_Rule {
 		 */
 		if ( current_theme_supports( 'title-tag' ) ) {
 
-			add_filter( 'pre_get_document_title', function( $title ) use ( $t ) {
+			add_filter( 'pre_get_document_title', function ( $title ) use ( $t ) {
 
 				$sep = apply_filters( 'document_title_separator', '-' );
 
-				foreach ( $t->title_callbacks as $callback )
+				foreach ( $t->title_callbacks as $callback ) {
 					$title = call_user_func_array( $callback, array( $title, $sep ) );
+				}
 
 				return $title;
 
 			} );
 
 		} else {
-			add_filter( 'wp_title', function( $title, $sep = '' ) use ( $t ) {
+			add_filter( 'wp_title', function ( $title, $sep = '' ) use ( $t ) {
 
-				foreach ( $t->title_callbacks as $callback )
+				foreach ( $t->title_callbacks as $callback ) {
 					$title = call_user_func_array( $callback, array( $title, $sep ) );
-
+				}
+				
 				return $title;
 
-			}, 10, 2 );
-
+			}, 10, 2 ); 
+			
 		}
 
 		add_action( 'admin_bar_menu', function() use ( $t ) {
