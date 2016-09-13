@@ -570,10 +570,13 @@ if ( ! function_exists( 'hm_parse_redirect' ) ) {
 	 * @return string
 	 */
 	function hm_parse_redirect( $redirect ) {
+
 		if ( is_user_logged_in() )
 			$redirect = str_replace( '_user_login_', wp_get_current_user()->user_login, $redirect );
+
 		$redirect = wp_sanitize_redirect( $redirect );
 		$redirect = wp_validate_redirect( $redirect, home_url() );
+		
 		return apply_filters( 'hm_parse_login_redirect',  $redirect );
 	}
 }
