@@ -1,0 +1,16 @@
+{
+  "name": "humanmade/hm-rewrite",
+  "description": "HM_Rewrite is a wrapper for the WordPress WP Rewrite system. http://hmn.md/wordpress-rewrite-rules-hm-core-style/",
+  "type": "wordpress-muplugin",
+  "require": {
+    "php": ">=5.2",
+    "composer/installers": "~1.0"
+  },
+  "license": "GPLv2",
+  "authors": [
+    {
+      "name": "Human Made Limited",
+      "email": "support@humanmade.co.uk"
+    }
+  ]
+}
