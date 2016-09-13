@@ -269,14 +269,36 @@ class HM_Rewrite_Rule {
 			return $classes;
 		} );
 
-		add_filter( 'wp_title', function( $title, $sep = '' ) use ( $t ) {
+		/**
+		 * Add support for theme support title tag
+		 * @since 4.4.0
+		 */
+		if ( current_theme_supports( 'title-tag' ) ) {
 
-			foreach ( $t->title_callbacks as $callback )
-				$title = call_user_func_array( $callback, array( $title, $sep ) );
+			add_filter( 'pre_get_document_title', function ( $title ) use ( $t ) {
 
-			return $title;
+				$sep = apply_filters( 'document_title_separator', '-' );
 
-		}, 10, 2 );
+				foreach ( $t->title_callbacks as $callback ) {
+					$title = call_user_func_array( $callback, array( $title, $sep ) );
+				}
+
+				return $title;
+
+			} );
+
+		} else {
+			add_filter( 'wp_title', function ( $title, $sep = '' ) use ( $t ) {
+
+				foreach ( $t->title_callbacks as $callback ) {
+					$title = call_user_func_array( $callback, array( $title, $sep ) );
+				}
+				
+				return $title;
+
+			}, 10, 2 ); 
+			
+		}
 
 		add_action( 'admin_bar_menu', function() use ( $t ) {
 			global $wp_admin_bar;
@@ -559,4 +581,21 @@ if ( HM_REWRITE_AUTOFLUSH ) {
 	 * Automatically flush rewrite rules when they're changed
 	 */
 	add_action( 'wp_loaded', 'hm_rewrite_flush', 9999 );
+}
+
+if ( ! function_exists( 'hm_parse_redirect' ) ) {
+	/**
+	 * Parse the redirect string and replace _user_login_ with
+	 * the users login.
+	 *
+	 * @param string $redirect
+	 * @return string
+	 */
+	function hm_parse_redirect( $redirect ) {
+		if ( is_user_logged_in() )
+			$redirect = str_replace( '_user_login_', wp_get_current_user()->user_login, $redirect );
+		$redirect = wp_sanitize_redirect( $redirect );
+		$redirect = wp_validate_redirect( $redirect, home_url() );
+		return apply_filters( 'hm_parse_login_redirect',  $redirect );
+	}
 }
