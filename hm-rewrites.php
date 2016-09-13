@@ -582,3 +582,20 @@ if ( HM_REWRITE_AUTOFLUSH ) {
 	 */
 	add_action( 'wp_loaded', 'hm_rewrite_flush', 9999 );
 }
+
+if ( ! function_exists( 'hm_parse_redirect' ) ) {
+	/**
+	 * Parse the redirect string and replace _user_login_ with
+	 * the users login.
+	 *
+	 * @param string $redirect
+	 * @return string
+	 */
+	function hm_parse_redirect( $redirect ) {
+		if ( is_user_logged_in() )
+			$redirect = str_replace( '_user_login_', wp_get_current_user()->user_login, $redirect );
+		$redirect = wp_sanitize_redirect( $redirect );
+		$redirect = wp_validate_redirect( $redirect, home_url() );
+		return apply_filters( 'hm_parse_login_redirect',  $redirect );
+	}
+}
