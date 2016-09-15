@@ -9,8 +9,9 @@
   "license": "GPLv2",
   "authors": [
     {
-      "name": "Human Made Limited",
-      "email": "support@humanmade.co.uk"
+      "name": "Human Made",
+      "email": "support@humanmade.co.uk",
+      "homepage":"http://hmn.md/"
     }
   ]
 }
