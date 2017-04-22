@@ -285,7 +285,7 @@ class HM_Rewrite_Rule {
 
 				return $title;
 
-			} );
+			}, 20 );
 
 		} else {
 			add_filter( 'wp_title', function ( $title, $sep = '' ) use ( $t ) {
@@ -296,7 +296,7 @@ class HM_Rewrite_Rule {
 				
 				return $title;
 
-			}, 10, 2 ); 
+			}, 20, 2 );
 			
 		}
 
