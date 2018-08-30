@@ -243,7 +243,7 @@ class HM_Rewrite_Rule {
 				}
 				exit;
 			}
-		});
+		}, apply_filters( 'hm_template_redirect_everything_priority', 10 ) );
 
 		add_filter( 'parse_query', $closure = function( WP_Query $query ) use ( $t, &$closure ) {
 
