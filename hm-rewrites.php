@@ -416,20 +416,12 @@ class HM_Rewrite_Rule {
  * @param  array 		$request_methods An array of request methods, e.g. PUT, POST
  */
 function hm_add_rewrite_rule( $args = array() ) {
-
-	// backwards compat
-	if ( count( func_get_args() ) > 1 && is_string( $args ) ) {
-		$provided = func_get_args();
-
-		$args = array();
-		$args['regex'] = $provided[0];
-		$args['query'] = $provided[1];
-
-		if ( count( $provided ) > 2 )
-			$args['template'] = $provided[2];
-
-		if ( count( $provided ) > 3 )
-			$args = array_merge( $args, $provided[3] );
+	if ( count( func_get_args() ) > 1 ) {
+		trigger_error(
+			'Passing individual arguments to hm_add_rewrite_rule() is no longer supported',
+			E_USER_WARNING
+		);
+		return;
 	}
 
 	if ( ! empty( $args['rewrite'] ) )
