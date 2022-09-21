@@ -109,6 +109,7 @@ class HM_Rewrite_Rule {
 	public $template = '';
 	public $access_rule = '';
 	public $request_methods = array();
+	public $rewrite_tests = null;
 	public $disable_canonical = false;
 
 	public function __construct( $regex, $id = null ) {
@@ -148,6 +149,25 @@ class HM_Rewrite_Rule {
 	public function get_public_query_var_exports() {
 
 		return array_keys( wp_parse_args( $this->get_wp_query_args() ) );
+	}
+
+	/**
+	 * @param callable $callback
+	 * @return void
+	 */
+	public function set_rewrite_tests_callback( $callback ) {
+		$this->rewrite_tests = $callback;
+	}
+
+	/**
+	 * @return array<string, string[]>
+	 */
+	public function get_rewrite_tests() {
+		if ( null === $this->rewrite_tests ) {
+			return array();
+		}
+
+		return call_user_func( $this->rewrite_tests );
 	}
 
 	/**
@@ -400,7 +420,7 @@ class HM_Rewrite_Rule {
  * Create a new rewrite with the arguments listed below. The only required argument is 'regex'
  *
  * @param  string 		$regex 		The rewrite regex, start / end delimter not required. Eg: '^people/([^/]+)/?'
- * @param  mixed 		$query 		The WP_Query args to be used on this "page"
+ * @param  string 		$query 		The WP_Query args to be used on this "page"
  * @param  string 		$template 	The template file used to render the request. Not required, will use
  *                             		the template file for the WP_Query if not set. Relative to template_directory() or absolute.
  * @param  string 		$body_class A class to be added to body_class in the rendered template
@@ -413,6 +433,7 @@ class HM_Rewrite_Rule {
  * @param  function 	$query_callback A callback taht will be called once the WP_Query has finished. Use to overrite any
  *                                   	annoying is_404, is_home etc that you custom query may not match to.
  * @param  function 	$access_rule An access rule for restriciton to logged-in-users only for example.
+ * @param  function		$rewrite_tests_callback A callback that returns an array of paths to test with the Rewrite Rule Testing plugin.
  * @param  array 		$request_methods An array of request methods, e.g. PUT, POST
  */
 function hm_add_rewrite_rule( $args = array() ) {
@@ -454,6 +475,9 @@ function hm_add_rewrite_rule( $args = array() ) {
 
 	if ( ! empty( $args['query'] ) )
 		$rule->set_wp_query_args( $args['query'] );
+
+	if ( ! empty( $args['rewrite_tests_callback'] ) )
+		$rule->set_rewrite_tests_callback( $args['rewrite_tests_callback'] );
 
 	if ( ! empty( $args['permission'] ) )
 		$rule->set_access_rule( $args['permission'] );
@@ -545,6 +569,33 @@ add_filter( 'query_vars', function( $query_vars ) {
 
 	return $query_vars;
 
+} );
+
+/**
+ * Add rewrite tests to integrate with the Rewrite Rule Testing plugin.
+ */
+add_filter( 'rewrite_testing_tests', function( array $tests ) {
+	foreach ( HM_Rewrite::get_rules() as $rule ) {
+		$rule_tests = $rule->get_rewrite_tests();
+
+		if ( ! $rule_tests ) {
+			continue;
+		}
+
+		$args = $rule->get_wp_query_args();
+
+		foreach ( $rule_tests as $group => $rule_tests ) {
+			if ( ! isset( $tests[ $group ] ) ) {
+				$tests[ $group ] = array();
+			}
+
+			foreach ( $rule_tests as $rule_test ) {
+				$tests[ $group ][ $rule_test ] = $args;
+			}
+		}
+	}
+
+	return $tests;
 } );
 
 /**
