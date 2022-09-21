@@ -2,7 +2,7 @@
 
 /*
 Plugin Name: HM Rewrite
-Version: 1.0
+Version: 1.1
 Author: Human Made Limited
 Author URI: http://hmn.md/
 */
