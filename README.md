@@ -44,6 +44,14 @@ hm_add_rewrite_rule( array(
   },
   'title_callback' => function( $title, $seperator ) {
     return review_category . ' ' . $seperator . ' ' . $title;
+  },
+  'rewrite_tests_callback' => function() {
+    return array(
+      'Review Category' => array(
+        '/reviews/foo/',
+        '/reviews/bar/',
+      ),
+    );
   }
 ) );
 ```
