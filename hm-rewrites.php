@@ -109,7 +109,7 @@ class HM_Rewrite_Rule {
 	public $template = '';
 	public $access_rule = '';
 	public $request_methods = array();
-	public $rewrite_tests = null;
+	public $rewrite_tests_callback = null;
 	public $disable_canonical = false;
 
 	public function __construct( $regex, $id = null ) {
@@ -156,18 +156,18 @@ class HM_Rewrite_Rule {
 	 * @return void
 	 */
 	public function set_rewrite_tests_callback( $callback ) {
-		$this->rewrite_tests = $callback;
+		$this->rewrite_tests_callback = $callback;
 	}
 
 	/**
 	 * @return array<string, string[]>
 	 */
 	public function get_rewrite_tests() {
-		if ( null === $this->rewrite_tests ) {
+		if ( null === $this->rewrite_tests_callback ) {
 			return array();
 		}
 
-		return call_user_func( $this->rewrite_tests );
+		return call_user_func( $this->rewrite_tests_callback );
 	}
 
 	/**
