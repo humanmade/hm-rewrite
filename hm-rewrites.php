@@ -584,12 +584,12 @@ add_filter( 'rewrite_testing_tests', function( array $tests ) {
 
 		$args = $rule->get_wp_query_args();
 
-		foreach ( $rule_tests as $group => $rule_tests ) {
+		foreach ( $rule_tests as $group => $group_tests ) {
 			if ( ! isset( $tests[ $group ] ) ) {
 				$tests[ $group ] = array();
 			}
 
-			foreach ( $rule_tests as $rule_test ) {
+			foreach ( $group_tests as $rule_test ) {
 				$tests[ $group ][ $rule_test ] = $args;
 			}
 		}
